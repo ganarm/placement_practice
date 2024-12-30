@@ -1,3 +1,4 @@
+// Find second largest as well as first largest without using sorting
 import java.util.*;
 class SecondLargest {
     public static void main(String[] args) {
