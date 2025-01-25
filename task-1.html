@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Factorial Calculator</title>
+  <title>Factorial Calculator with Animation</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -88,11 +88,22 @@
     .error {
       color: red;
     }
+
+    .animation {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #451ac1;
+      text-align: left;
+    }
+
+    .step {
+      margin: 5px 0;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Factorial Calculator</h1>
+    <h1>Factorial Calculator with Animation</h1>
     <div class="input-container">
       <input type="text" id="numberInput" placeholder="Enter a number" />
     </div>
@@ -108,12 +119,19 @@
     </div>
     <button id="calculateBtn">Calculate</button>
     <div id="result" class="result"></div>
+    <div id="animation" class="animation"></div>
   </div>
+
   <script>
     document.getElementById("calculateBtn").addEventListener("click", () => {
       const numberInput = document.getElementById("numberInput").value.trim();
       const method = document.querySelector('input[name="method"]:checked').value;
       const resultDiv = document.getElementById("result");
+      const animationDiv = document.getElementById("animation");
+
+      // Clear previous results and animations
+      resultDiv.innerHTML = "";
+      animationDiv.innerHTML = "";
 
       // Input validation
       if (!numberInput || isNaN(numberInput) || numberInput <= 0 || !Number.isInteger(parseFloat(numberInput))) {
@@ -122,30 +140,37 @@
       }
 
       const number = parseInt(numberInput, 10);
-      let result;
 
       if (method === "iterative") {
-        result = factorialIterative(number);
+        factorialIterative(number);
       } else {
-        result = factorialRecursive(number);
+        factorialRecursive(number);
       }
-
-      resultDiv.innerHTML = `<p>The factorial of <strong>${number}</strong> using <strong>${method}</strong> method is: <strong>${result}</strong>.</p>`;
     });
 
-    // Iterative method
     function factorialIterative(num) {
+      const animationDiv = document.getElementById("animation");
       let result = 1;
+      animationDiv.innerHTML += `<p class="step">Starting Iterative Calculation:</p>`;
+
       for (let i = 1; i <= num; i++) {
         result *= i;
+        animationDiv.innerHTML += `<p class="step">Step ${i}: ${i}! = ${result}</p>`;
       }
-      return result;
+
+      document.getElementById("result").innerHTML = `<p>The factorial of <strong>${num}</strong> using <strong>Iterative</strong> method is: <strong>${result}</strong>.</p>`;
     }
 
-    // Recursive method
-    function factorialRecursive(num) {
-      if (num === 1) return 1;
-      return num * factorialRecursive(num - 1);
+    function factorialRecursive(num, step = 1, result = 1) {
+      const animationDiv = document.getElementById("animation");
+      if (num === 1) {
+        animationDiv.innerHTML += `<p class="step">Step ${step}: 1! = ${result}</p>`;
+        document.getElementById("result").innerHTML = `<p>The factorial of <strong>${num}</strong> using <strong>Recursive</strong> method is: <strong>${result}</strong>.</p>`;
+        return 1;
+      }
+
+      animationDiv.innerHTML += `<p class="step">Step ${step}: ${num}! = ${num} × (${num - 1})!</p>`;
+      setTimeout(() => factorialRecursive(num - 1, step + 1, result * num), 500);
     }
   </script>
 </body>
